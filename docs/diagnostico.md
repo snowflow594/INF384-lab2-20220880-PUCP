@@ -1,3 +1,5 @@
+## Parte 1
+
 # 4 errores en el pipeline
 
 1.- El primer error que se puede encontrar es que el job de publicar no depende de validar por lo que siempre se realizará la publicación siempre en todas las corridas del workflow
@@ -22,11 +24,19 @@ Escogería el Lead Time, ya que se estarían resolviendo el tema de reducir el t
 
 Se medirá el número relacionado a el tiempo de duración de cada pipeline
 
-| Ejecucion | Duracion | URL |
-|---|---|---|
-| 1 | 59s | https://github.com/snowflow594/INF384-lab2-20220880-PUCP/actions/runs/34443492240 |
-| 2 | 1m 14s | https://github.com/snowflow594/INF384-lab2-20220880-PUCP/actions/runs/34443661307 |
-| 3 | 54s | https://github.com/snowflow594/INF384-lab2-20220880-PUCP/actions/runs/34443914408 |
+## Parte 4
+
+# Proxy
+
+El valor del tiempo de ejecución actual ahora es de 1m 11s, esto se puede deber a que se siguen realizando las pruebas de calidad de sonar cloud por lo que este tiempo en si no debería de variar mucho a no ser que se quiten estas validaciones
+
+# Justificación de la versión
+
+Se utilizó la versión presente en el archivo de VERSION y en el de pyproject.toml, el "1.2.0"
+
+# Lo que no se resolvió
+
+Se necesitaria validar que se pueda publicar el artefacto únicamente estando dentro de la rama main, esto se puede realizar añadiendo un if en el job para validar que estamos en la rama main. Además, se puede agregar que el trigger se realice solo cuando se realizan push hacia main y no en todas las ramas, ya que ahora no hay algo fijado en el pipeline. Otro de los problemas sería que las dependencias se instalan dos veces por lo que se podría optimizar para reducir el tiempo de ejecución.
 
 ## Declaracion de uso de IA generativa
 
@@ -35,7 +45,21 @@ trabajo previo, cuales, y con que proposito. Adjuntar los prompts utilizados.
 
 # IA Usada
 
-Se utilizó ChatGPT para la identificación de los problemas relacionados al pipeline con los siguientes prompts:
+Se utilizó ChatGPT para la identificación de los problemas relacionados al pipeline, en el tema de la corrección del pipeline y su respectivo análisis. Asimismo, se adjuntan los promopts utilizados:
 
+
+# #1
 name: pipeline on: push: workflow_dispatch: jobs: validar: name: Validar runs-on: ubuntu-latest steps: - name: Descargar el codigo uses: actions/checkout@v4 with: fetch-depth: 0 - name: Preparar Python uses: actions/setup-python@v5 with: python-version: '3.11' - name: Instalar dependencias run: | python -m pip install --upgrade pip pip install -r requirements.txt - name: Ejecutar pruebas run: pytest --cov=src --cov-report=xml - name: Analisis de calidad uses: SonarSource/sonarqube-scan-action@v8 env: SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} SONAR_HOST_URL: https://sonarcloud.io with: args: > -Dsonar.organization=${{ vars.SONAR_ORG }} -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }} publicar: name: Publicar artefacto runs-on: ubuntu-latest steps: - name: Descargar el codigo uses: actions/checkout@v4 - name: Preparar Python uses: actions/setup-python@v5 with: python-version: '3.11' - name: Instalar dependencias run: | python -m pip install --upgrade pip pip install -r requirements.txt - name: Construir el paquete run: python -m build - name: Publicar el paquete uses: actions/upload-artifact@v4 with: name: paquete path: dist/ overwrite: true puedes decirme los 4 errores que están presentes en este pipeline?
 
+# #2
+
+ok, y ahora qué errores todavía podrían seguir presentes en el pipeline
+
+# #3
+
+ok, ahora podrías darme una versión arreglada del pipeline con los errores encontrados y las siguientes validaciones:
+1 Las dependencias se instalan desde el archivo de bloqueo, no resolviendo versiones
+2 Las dependencias se cachean entre ejecuciones
+3 El pipeline se detiene si el análisis de calidad no cumple el quality gate
+4 El artifact publicado debe llamarse despachos-<versión>, solo desde main, y solo
+si la validación pasó
