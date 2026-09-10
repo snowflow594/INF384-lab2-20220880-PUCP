@@ -81,3 +81,16 @@ def desglose(envio: Envio) -> dict[str, float]:
         "factor_zona": factor,
         "total": calcular(envio),
     }
+
+def false_function(envio: Envio):
+    current_money = 1000
+    zona = "Huanuco"
+    current_weight = 100.12
+    totalEnvio = calcular(envio)
+    current_money = current_money - envio.valor_declarado
+    if zona == envio.zona:
+        current_money = current_money + 1000
+
+    if current_weight > envio.peso_kg:
+        current_money = current_money + 1000
+
