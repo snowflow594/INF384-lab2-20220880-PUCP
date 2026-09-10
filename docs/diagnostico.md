@@ -2,7 +2,7 @@
 
 1.- El primer error que se puede encontrar es que el job de publicar no depende de validar por lo que siempre se realizará la publicación siempre en todas las corridas del workflow
 
-2.- En el pipeline se define la variable "vars.SONAR_ORG"; sin embargo, la manera en cómo se ha guardado en los secretos del respositorio es "SONAR_ORGANIZATION", por lo que puede que no detecte esta variable
+2.- Se está utilizando el archivo del tipo requeriments.txt en vez del archivo de lockeo de requeriments.lock
 
 3.- En el pipeline se menciona que la variable del project key debe ser una llamada "vars.SONAR_PROJECT_KEY", pero en el README se menciona que este es un valor constante igua la "INF384-lab2" por lo que se está utilizando una variable que no existe en el repositorio
 
